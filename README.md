@@ -25,12 +25,10 @@ To get started, first edit `constants.py` to point to this repository dir. Then,
 ```
 mimicdata
 |   d_icd_diagnoses.csv
-|   d_icd_procedures.csv
 |   ICD10_descriptions (already in repo)
 └───mimic4/
 |   |   discharge.csv
 |   |   diagnoses_icd.csv
-|   |   procedures_icd.csv
 |   |   *_hadm_ids.csv (already in repo)
 ```
 
