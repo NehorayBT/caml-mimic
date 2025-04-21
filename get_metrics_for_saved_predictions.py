@@ -26,7 +26,7 @@ parts = dset.split('_')
 
 Y = 'full' if parts[1].startswith('full') else 50
 version = 'mimic2' if parts[0].endswith('2') else 'mimic3'
-data_dir = MIMIC_2_DIR if version == 'mimic2' else MIMIC_3_DIR
+data_dir = MIMIC_2_DIR if version == 'mimic2' else MIMIC_4_DIR
 train_file = '%s/train.csv' % data_dir if version == 'mimic2' else '%s/train_%s.csv' % (data_dir, str(Y))
 test_file = '%s/test.csv' % data_dir if version == 'mimic2' else '%s/test_%s.csv' % (data_dir, str(Y))
 

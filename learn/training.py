@@ -20,7 +20,7 @@ from collections import defaultdict
 from constants import *
 import datasets
 import evaluation
-import interpret
+import learn.interpret
 import persistence
 import learn.models as models
 import learn.tools as tools
@@ -36,7 +36,11 @@ def init(args):
         Load data, build model, create optimizer, create vars to hold metrics, etc.
     """
     #need to handle really large text fields
-    csv.field_size_limit(sys.maxsize)
+    try:
+        csv.field_size_limit(sys.maxsize)
+    except OverflowError:
+        # For Windows OS, set a smaller limit
+        csv.field_size_limit(2147483647)
 
     #load vocab and other lookups
     desc_embed = args.lmbda > 0
@@ -69,7 +73,7 @@ def train_epochs(args, model, optimizer, params, dicts):
     for epoch in range(args.n_epochs):
         #only test on train/test set on very last epoch
         if epoch == 0 and not args.test_model:
-            model_dir = os.path.join(MODEL_DIR, '_'.join([args.model, time.strftime('%b_%d_%H:%M:%S', time.localtime())]))
+            model_dir = os.path.join(MODEL_DIR, '_'.join([args.model, time.strftime('%b_%d_%H_%M_%S', time.localtime())]))
             os.mkdir(model_dir)
         elif args.test_model:
             model_dir = os.path.dirname(os.path.abspath(args.test_model))
@@ -197,12 +201,12 @@ def train(model, optimizer, Y, epoch, batch_size, data_path, gpu, version, dicts
         loss.backward()
         optimizer.step()
 
-        losses.append(loss.data[0])
+        losses.append(loss.item())
 
         if not quiet and batch_idx % print_every == 0:
             #print the average loss of the last 10 batches
             print("Train epoch: {} [batch #{}, batch_size {}, seq length {}]\tLoss: {:.6f}".format(
-                epoch, batch_idx, data.size()[0], data.size()[1], np.mean(losses[-10:])))
+                epoch, batch_idx, data.size()[0], data.size()[1], np.mean(losses[-10:])), end='\r')
     return losses, unseen_code_inds
 
 def unseen_code_vecs(model, code_inds, dicts, gpu):
@@ -260,14 +264,14 @@ def test(model, Y, epoch, data_path, fold, gpu, version, code_inds, dicts, sampl
 
         output = F.sigmoid(output)
         output = output.data.cpu().numpy()
-        losses.append(loss.data[0])
+        losses.append(loss.item())
         target_data = target.data.cpu().numpy()
         if get_attn and samples:
             interpret.save_samples(data, output, target_data, alpha, window_size, epoch, tp_file, fp_file, dicts=dicts)
 
         #save predictions, target, hadm ids
         yhat_raw.append(output)
-        output = np.round(output)
+        output = (output >= 0.5).astype(int)
         y.append(target_data)
         yhat.append(output)
         hids.extend(hadm_ids)
@@ -288,6 +292,12 @@ def test(model, Y, epoch, data_path, fold, gpu, version, code_inds, dicts, sampl
     metrics = evaluation.all_metrics(yhat, y, k=k, yhat_raw=yhat_raw)
     evaluation.print_metrics(metrics)
     metrics['loss_%s' % fold] = np.mean(losses)
+    # modified
+    # print()
+    # print("#########################")
+    # print("%s Loss: %.4f" % (fold.capitalize(), np.mean(losses)))
+    # print("#########################")
+    # print()
     return metrics
 
 if __name__ == "__main__":

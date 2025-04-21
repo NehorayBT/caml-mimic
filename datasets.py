@@ -152,9 +152,11 @@ def load_lookups(args, desc_embed=False):
         ind2c, desc_dict = load_full_codes(args.data_path, version=args.version)
     else:
         codes = set()
-        with open("%s/TOP_%s_CODES.csv" % (MIMIC_3_DIR, str(args.Y)), 'r') as labelfile:
+        with open("%s/TOP_%s_CODES.csv" % (MIMIC_4_DIR, str(args.Y)), 'r') as labelfile:
             lr = csv.reader(labelfile)
             for i,row in enumerate(lr):
+                if(row == []):
+                    continue
                 codes.add(row[0])
         ind2c = {i:c for i,c in enumerate(sorted(codes))}
         desc_dict = load_code_descriptions()
@@ -226,7 +228,7 @@ def load_code_descriptions(version='mimic3'):
     #load description lookup from the appropriate data files
     desc_dict = defaultdict(str)
     if version == 'mimic2':
-        with open('%s/MIMIC_ICD9_mapping' % MIMIC_2_DIR, 'r') as f:
+        with open('%s/MIMIC_ICD10_mapping' % MIMIC_2_DIR, 'r') as f:
             r = csv.reader(f)
             #header
             next(r)
@@ -250,7 +252,7 @@ def load_code_descriptions(version='mimic3'):
                 desc = row[-1]
                 if code not in desc_dict.keys():
                     desc_dict[reformat(code, False)] = desc
-        with open('%s/ICD9_descriptions' % DATA_DIR, 'r') as labelfile:
+        with open('%s/ICD10_descriptions' % DATA_DIR, 'r') as labelfile:
             for i,row in enumerate(labelfile):
                 row = row.rstrip().split()
                 code = row[0]
@@ -264,7 +266,7 @@ def load_description_vectors(Y, version='mimic3'):
     if version == 'mimic2':
         data_dir = MIMIC_2_DIR
     else:
-        data_dir = MIMIC_3_DIR
+        data_dir = MIMIC_4_DIR
     with open("%s/description_vectors.vocab" % (data_dir), 'r') as vfile:
         r = csv.reader(vfile, delimiter=" ")
         #header

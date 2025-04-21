@@ -2,9 +2,11 @@ PAD_CHAR = "**PAD**"
 EMBEDDING_SIZE = 100
 MAX_LENGTH = 2500
 
-#where you want to save any models you may train
-MODEL_DIR = '/path/to/repo/saved_models/'
+REPO_DIR = 'D:/Nehoray/AB University/NLP/Project/CAML env 2/caml-mimic'
 
-DATA_DIR = '/path/to/repo/mimicdata/'
-MIMIC_3_DIR = '/path/to/repo/mimicdata/mimic3'
-MIMIC_2_DIR = '/path/to/repo/mimicdata/mimic2'
+#where you want to save any models you may train
+MODEL_DIR = f'{REPO_DIR}/saved_models/'
+
+DATA_DIR = f'{REPO_DIR}/mimicdata/'
+MIMIC_4_DIR = f'{REPO_DIR}/mimicdata/mimic3'
+MIMIC_2_DIR = f'{REPO_DIR}/mimicdata/mimic2'

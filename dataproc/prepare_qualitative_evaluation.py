@@ -74,12 +74,12 @@ def main():
     sim_keys = set(sim_windows.keys())
     valid_texts = []
     print("building evaluation document")
-    with open('%s/qualitative_eval_full.md' % (MIMIC_3_DIR), 'w') as of:
-        with open('%s/qualitative_eval_full_key.md' % (MIMIC_3_DIR), 'w') as kf:
+    with open('%s/qualitative_eval_full.md' % (MIMIC_4_DIR), 'w') as of:
+        with open('%s/qualitative_eval_full_key.md' % (MIMIC_4_DIR), 'w') as kf:
             code_counts = Counter()
             of.write('### Instructions\n')
             of.write(INSTRUCTIONS + '\n\n')
-            with open('%s/test_full.csv' % MIMIC_3_DIR, 'r') as f:
+            with open('%s/test_full.csv' % MIMIC_4_DIR, 'r') as f:
                 r = csv.reader(f)
                 #header
                 next(r)

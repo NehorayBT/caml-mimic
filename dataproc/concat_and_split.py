@@ -6,7 +6,7 @@ from datetime import datetime
 import random
 
 from constants import DATA_DIR
-from constants import MIMIC_3_DIR
+from constants import MIMIC_4_DIR
 
 import pandas as pd
 
@@ -20,8 +20,9 @@ def concat_data(labelsfile, notes_file):
     """
     with open(labelsfile, 'r') as lf:
         print("CONCATENATING")
+        counter = 0
         with open(notes_file, 'r') as notesfile:
-            outfilename = '%s/notes_labeled.csv' % MIMIC_3_DIR
+            outfilename = '%s/notes_labeled.csv' % MIMIC_4_DIR
             with open(outfilename, 'w') as outfile:
                 w = csv.writer(outfile)
                 w.writerow(['SUBJECT_ID', 'HADM_ID', 'TEXT', 'LABELS'])
@@ -35,8 +36,10 @@ def concat_data(labelsfile, notes_file):
                     cur_subj, cur_labels, cur_hadm = next(labels_gen)
 
                     if cur_hadm == hadm_id:
+                        #print(cur_subj, cur_labels, cur_hadm, ":::", hadm_id)
                         w.writerow([subj_id, str(hadm_id), text, ';'.join(cur_labels)])
                     else:
+                        print("ERROR: ", cur_subj, cur_labels, cur_hadm, ":::", hadm_id)
                         print("couldn't find matching hadm_id. data is probably not sorted correctly")
                         break
                     
@@ -60,7 +63,7 @@ def split_data(labeledfile, base_name):
     #read in train, dev, test splits
     for splt in ['train', 'dev', 'test']:
         hadm_ids[splt] = set()
-        with open('%s/%s_full_hadm_ids.csv' % (MIMIC_3_DIR, splt), 'r') as f:
+        with open('%s/%s_full_hadm_ids.csv' % (MIMIC_4_DIR, splt), 'r') as f:
             for line in f:
                 hadm_ids[splt].add(line.rstrip())
 
@@ -70,6 +73,9 @@ def split_data(labeledfile, base_name):
         i = 0
         cur_hadm = 0
         for row in reader:
+            if(row == []):
+                continue
+            
             #filter text, write to file according to train/dev/test split
             if i % 10000 == 0:
                 print(str(i) + " read")

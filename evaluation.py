@@ -236,7 +236,7 @@ def results_by_type(Y, mdir, version='mimic3'):
     diag_golds = defaultdict(lambda: set([]))
     proc_golds = defaultdict(lambda: set([]))
     golds = defaultdict(lambda: set())
-    test_file = '%s/test_%s.csv' % (MIMIC_3_DIR, str(Y)) if version == 'mimic3' else '%s/test.csv' % MIMIC_2_DIR
+    test_file = '%s/test_%s.csv' % (MIMIC_4_DIR, str(Y)) if version == 'mimic3' else '%s/test.csv' % MIMIC_2_DIR
     with open(test_file, 'r') as f:
         r = csv.reader(f)
         #header
@@ -320,6 +320,7 @@ def intersect_size(yhat, y, axis):
 
 def print_metrics(metrics):
     print()
+    
     if "auc_macro" in metrics.keys():
         print("[MACRO] accuracy, precision, recall, f-measure, AUC")
         print("%.4f, %.4f, %.4f, %.4f, %.4f" % (metrics["acc_macro"], metrics["prec_macro"], metrics["rec_macro"], metrics["f1_macro"], metrics["auc_macro"]))

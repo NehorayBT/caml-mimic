@@ -12,7 +12,7 @@ import operator
 from collections import defaultdict
 from scipy.sparse import csr_matrix
 
-from constants import DATA_DIR, MIMIC_3_DIR
+from constants import DATA_DIR, MIMIC_4_DIR
 
 def build_vocab(vocab_min, infile, vocab_filename):
     """
