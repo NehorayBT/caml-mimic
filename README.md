@@ -37,3 +37,8 @@ Now, make sure your python path includes the base directory of this repository. 
 ## Training a new model
 
 To train a new model from scratch, please use the script `learn/training.py`. Execute `python training.py -h` for a full list of input arguments and flags. The `train_new_model.sh` scripts in the `predictions/` subdirectories can serve as examples (or you can run those directly to use the same hyperparameters).
+
+## To reproduce the training we did for our project
+
+After pre-processing the MIMIC-IV files as described in the previous section, simply execute the following command:
+`python -m learn.training mimicdata/mimic4/train_50.csv mimicdata/mimic4/vocab.csv 50 conv_attn 5 --filter-size 10 --num-filter-maps 50 --lr 2e-5 --batch-size 8 --gpu --weight-decay 0.01`
