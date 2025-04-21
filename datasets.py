@@ -235,7 +235,7 @@ def load_code_descriptions(version='mimic3'):
             for row in r:
                 desc_dict[str(row[1])] = str(row[2])
     else:
-        with open("%s/D_ICD_DIAGNOSES.csv" % (DATA_DIR), 'r') as descfile:
+        with open("%s/d_icd_diagnoses.csv" % (DATA_DIR), 'r') as descfile:
             r = csv.reader(descfile)
             #header
             next(r)
@@ -243,15 +243,6 @@ def load_code_descriptions(version='mimic3'):
                 code = row[1]
                 desc = row[-1]
                 desc_dict[reformat(code, True)] = desc
-        with open("%s/D_ICD_PROCEDURES.csv" % (DATA_DIR), 'r') as descfile:
-            r = csv.reader(descfile)
-            #header
-            next(r)
-            for row in r:
-                code = row[1]
-                desc = row[-1]
-                if code not in desc_dict.keys():
-                    desc_dict[reformat(code, False)] = desc
         with open('%s/ICD10_descriptions' % DATA_DIR, 'r') as labelfile:
             for i,row in enumerate(labelfile):
                 row = row.rstrip().split()

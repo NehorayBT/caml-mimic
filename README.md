@@ -29,8 +29,8 @@ mimicdata
 |   ICD10_descriptions (already in repo)
 └───mimic4/
 |   |   discharge.csv
-|   |   DIAGNOSES_ICD.csv
-|   |   PROCEDURES_ICD.csv
+|   |   diagnoses_icd.csv
+|   |   procedures_icd.csv
 |   |   *_hadm_ids.csv (already in repo)
 ```
 
